@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,11 +26,11 @@ public class CityServiceImpl implements CityService {
     }
     @Override
     public CityDTO getCityById(Long id) {
-        City city = cityRepository.findById(id);
-        if (city == null) {
+        Optional<City> city = cityRepository.findById(id);
+        if (city.isEmpty()) {
             throw new EntityNotFoundException("Город с id " + id + " не найден.");
         }
-        return cityMapper.toDto(city);
+        return cityMapper.toDto(city.orElse(null));
     }
 
     @Override
@@ -42,7 +43,7 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public List<CityDTO> getAllCities() {
-        logger.info("Полцчение списка городов: ");
+        logger.info("Получение списка городов: ");
         return cityRepository.findAll().stream()
                 .map(cityMapper::toDto)
                 .collect(Collectors.toList());
@@ -50,12 +51,20 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public void updateCity(CityDTO cityDTO) {
+        logger.info("Изменение города: {}", cityDTO.getName());
         City city = cityMapper.toEntity(cityDTO);
-        cityRepository.update(city);
+        cityRepository.update(city.getId());
+        logger.info("Город изменен: {}", city.getName());
     }
 
     @Override
     public void deleteCity(Long id) {
-        cityRepository.delete(id);
+        logger.info("Удаление города с ID: {}", id);
+        Optional<City> city = cityRepository.findById(id);
+        if (city.isEmpty()) {
+            throw new EntityNotFoundException("Город с id " + id + " не найден.");
+        }
+        cityRepository.delete(city.get());
+        logger.info("Город удален ID: {}", id);
     }
 }

@@ -1,13 +1,15 @@
 package by.malahovski.repository;
 
 import by.malahovski.model.City;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface CityRepository {
-    void save(City city);
-    void update(City city);
-    City findById(Long id);
-    List<City> findAll();
-    void delete(Long id);
+@Repository
+public interface CityRepository extends JpaRepository<City, Long> {
+    @Modifying
+    @Query("UPDATE City c SET c.name = :name, c.population = :population, c.hasMetro = :hasMetro WHERE c.id = :id")
+    void update(@Param("id") Long id);
 }

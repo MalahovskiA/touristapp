@@ -4,11 +4,13 @@ import by.malahovski.dtos.AttractionDTO;
 import by.malahovski.handler.EntityNotFoundException;
 import by.malahovski.mappers.AttractionMapper;
 import by.malahovski.model.Attraction;
+import by.malahovski.model.City;
 import by.malahovski.repository.AttractionRepository;
 import by.malahovski.service.AttractionService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,11 +25,11 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     public AttractionDTO getAttractionById(Long id) {
-        Attraction attraction = attractionRepository.findById(id);
-        if (attraction == null) {
+        Optional<Attraction> attraction = attractionRepository.findById(id);
+        if (attraction.isEmpty()) {
             throw new EntityNotFoundException("Достопримечательность с id " + id + " не найдена.");
         }
-        return attractionMapper.toDto(attraction);
+        return attractionMapper.toDto(attraction.orElse(null));
     }
 
     @Override
@@ -45,7 +47,12 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     public List<AttractionDTO> getAttractionsByCity(Long cityId) {
-        return attractionRepository.findByCity(cityId).stream()
+        return List.of();
+    }
+
+    @Override
+    public List<AttractionDTO> getAttractionsByCity(City city) {
+        return attractionRepository.findByCity(city).stream()
                 .map(attractionMapper::toDto)
                 .collect(Collectors.toList());
     }

@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:16.4-alpine3.20
+    restart: always
+    environment:
+      POSTGRES_DB: tur_database
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - 788:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  liquibase:
+    image: liquibase/liquibase
+    environment:
+      - LIQUIBASE_COMMAND=update
+      - LIQUIBASE_URL=jdbc:postgresql://db:5432/tur_database
+      - LIQUIBASE_USERNAME=postgres
+      - LIQUIBASE_PASSWORD=admin
+      - LIQUIBASE_CHANGELOG_FILE=/liquibase/changelog/db.changelog-master.xml
+    volumes:
+      - D:/malahovski/touristapp/src/main/resources/db/changelog:/liquibase/changelog
+    depends_on:
+      - db
+
+volumes:
+  db-data:
