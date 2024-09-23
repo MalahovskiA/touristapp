@@ -19,15 +19,16 @@ public class Attraction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "name",nullable = false)
     private String name;
 
-    @Temporal(TemporalType.DATE)
+    @Column(name = "creation_date",nullable = false)
     private LocalDate creationDate;
 
-    @Column(columnDefinition = "text")
+    @Column(name = "description", columnDefinition = "text")
     private String description;
 
+    @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private AttractionType type;
 

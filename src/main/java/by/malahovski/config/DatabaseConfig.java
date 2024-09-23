@@ -1,9 +1,9 @@
 package by.malahovski.config;
 
+import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -32,6 +32,7 @@ public class DatabaseConfig {
         sessionFactory.setPackagesToScan("by.malahovsky.model");
 
         Properties hibernateProperties = new Properties();
+        hibernateProperties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         hibernateProperties.put("hibernate.show_sql", "true");
         hibernateProperties.put("hibernate.hbm2ddl.auto", "none");
 
@@ -41,9 +42,10 @@ public class DatabaseConfig {
     }
 
     @Bean
-    public HibernateTransactionManager transactionManager() {
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(sessionFactory().getObject());
-        return transactionManager;
+    public SpringLiquibase liquibase() {
+        SpringLiquibase liquibase = new SpringLiquibase();
+        liquibase.setDataSource(dataSource());
+        liquibase.setChangeLog("classpath:db/changelog/db.changelog-master.xml");
+        return liquibase;
     }
 }

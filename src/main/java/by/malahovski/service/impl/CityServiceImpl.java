@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class CityServiceImpl implements CityService {
+
     private final CityRepository cityRepository;
     private final CityMapper cityMapper;
     private static final Logger logger = LogManager.getLogger(CityServiceImpl.class);
