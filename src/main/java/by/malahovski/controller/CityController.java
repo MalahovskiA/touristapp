@@ -4,6 +4,8 @@ import by.malahovski.dtos.CityDTO;
 import by.malahovski.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -19,8 +21,15 @@ public class CityController {
     }
 
     @PostMapping
-    public void addCity(@RequestBody CityDTO cityDTO) {
-        cityService.addCity(cityDTO);
+    public ResponseEntity<CityDTO> addCity(@RequestBody CityDTO cityDTO) {
+        CityDTO createdCity = cityService.addCity(cityDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdCity);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CityDTO> getCityById(@PathVariable Long id) {
+        CityDTO cityDTO = cityService.getCityById(id);
+        return ResponseEntity.ok(cityDTO);
     }
 
     @GetMapping
@@ -29,13 +38,15 @@ public class CityController {
     }
 
     @PutMapping("/{id}")
-    public void updateCity(@PathVariable Long id, @RequestBody CityDTO cityDTO) {
+    public ResponseEntity<CityDTO> updateCity(@PathVariable Long id, @RequestBody CityDTO cityDTO) {
         cityDTO.setId(id);
-        cityService.updateCity(cityDTO);
+        CityDTO updatedCity = cityService.updateCity(cityDTO);
+        return ResponseEntity.ok(updatedCity);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCity(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCity(@PathVariable Long id) {
         cityService.deleteCity(id);
+        return ResponseEntity.noContent().build();
     }
 }

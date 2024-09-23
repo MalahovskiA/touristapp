@@ -1,9 +1,10 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
 
     <changeSet id="02-01" author="Malahovski">
+        <!-- Город -->
         <insert tableName="city">
             <column name="id" value="1"/>
             <column name="name" value="Moscow"/>
@@ -41,11 +42,12 @@
     </changeSet>
 
     <changeSet id="02-02" author="Malahovski">
+        <!-- Достопримечательности -->
         <insert tableName="attraction">
             <column name="id" value="1"/>
             <column name="name" value="Kremlin"/>
             <column name="description" value="The Moscow Kremlin is a fortified complex at the heart of Moscow."/>
-            <column name="type" value="Palace"/>
+            <column name="type" value="PALACE"/>
             <column name="creation_date" value="1482-01-01"/>
             <column name="city_id" value="1"/>
         </insert>
@@ -54,7 +56,7 @@
             <column name="id" value="2"/>
             <column name="name" value="Hermitage Museum"/>
             <column name="description" value="The second-largest art museum in the world, located in Saint Petersburg."/>
-            <column name="type" value="Museum"/>
+            <column name="type" value="MUSEUM"/>
             <column name="creation_date" value="1764-12-07"/>
             <column name="city_id" value="2"/>
         </insert>
@@ -63,7 +65,7 @@
             <column name="id" value="3"/>
             <column name="name" value="Kazan Kremlin"/>
             <column name="description" value="A historic citadel and a UNESCO World Heritage site in Kazan."/>
-            <column name="type" value="Archaeological Site"/>
+            <column name="type" value="ARCHAEOLOGICAL"/>
             <column name="creation_date" value="1556-01-01"/>
             <column name="city_id" value="3"/>
         </insert>
@@ -72,7 +74,7 @@
             <column name="id" value="4"/>
             <column name="name" value="Novosibirsk Zoo"/>
             <column name="description" value="One of the largest zoos in Russia, home to rare species of animals."/>
-            <column name="type" value="Park"/>
+            <column name="type" value="PARK"/>
             <column name="creation_date" value="1933-06-29"/>
             <column name="city_id" value="4"/>
         </insert>
@@ -81,9 +83,58 @@
             <column name="id" value="5"/>
             <column name="name" value="Rosa Khutor"/>
             <column name="description" value="A ski resort located near Sochi, known for hosting events of the 2014 Winter Olympics."/>
-            <column name="type" value="Park"/>
+            <column name="type" value="PARK"/>
             <column name="creation_date" value="2011-12-15"/>
             <column name="city_id" value="5"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="02-03" author="Malahovski">
+        <!-- Туристические услуги -->
+        <insert tableName="tour_service">
+            <column name="id" value="1"/>
+            <column name="name" value="City Tour"/>
+            <column name="description" value="A guided tour through the main attractions of the city."/>
+        </insert>
+
+        <insert tableName="tour_service">
+            <column name="id" value="2"/>
+            <column name="name" value="Cultural Experience"/>
+            <column name="description" value="An immersive experience into the local culture and traditions."/>
+        </insert>
+
+        <insert tableName="tour_service">
+            <column name="id" value="3"/>
+            <column name="name" value="Nature Walk"/>
+            <column name="description" value="A guided walk through the natural beauty surrounding the city."/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="02-04" author="Malahovski">
+        <!-- Связи между достопримечательностями и туристическими услугами -->
+        <insert tableName="attraction_tour_service">
+            <column name="attraction_id" value="1"/>
+            <column name="tour_service_id" value="1"/>
+        </insert>
+
+        <insert tableName="attraction_tour_service">
+            <column name="attraction_id" value="2"/>
+            <column name="tour_service_id" value="2"/>
+        </insert>
+
+        <insert tableName="attraction_tour_service">
+            <column name="attraction_id" value="3"/>
+            <column name="tour_service_id" value="2"/>
+        </insert>
+
+        <insert tableName="attraction_tour_service">
+            <column name="attraction_id" value="4"/>
+            <column name="tour_service_id" value="3"/>
+        </insert>
+
+        <insert tableName="attraction_tour_service">
+            <column name="attraction_id" value="5"/>
+            <column name="tour_service_id" value="3"/>
         </insert>
     </changeSet>
 

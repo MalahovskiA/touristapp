@@ -1,8 +1,13 @@
 package by.malahovski.controller;
 
+
+
 import by.malahovski.dtos.AttractionDTO;
+import by.malahovski.model.City;
 import by.malahovski.service.AttractionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/attractions")
 public class AttractionController {
+
     private final AttractionService attractionService;
 
     @Autowired
@@ -18,28 +24,39 @@ public class AttractionController {
     }
 
     @PostMapping
-    public void addAttraction(@RequestBody AttractionDTO attractionDTO) {
-        attractionService.addAttraction(attractionDTO);
+    public ResponseEntity<AttractionDTO> addAttraction(@RequestBody AttractionDTO attractionDTO) {
+        AttractionDTO createdAttraction = attractionService.addAttraction(attractionDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdAttraction);
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
+    public ResponseEntity<AttractionDTO> getAttractionById(@PathVariable Long id) {
+        AttractionDTO attractionDTO = attractionService.getAttractionById(id);
+        return ResponseEntity.ok(attractionDTO);
+    }
+
+    @GetMapping("/city/all")
     public List<AttractionDTO> getAllAttractions() {
         return attractionService.getAllAttractions();
     }
 
     @GetMapping("/city/{cityId}")
     public List<AttractionDTO> getAttractionsByCity(@PathVariable Long cityId) {
-        return attractionService.getAttractionsByCity(cityId);
+        City city = new City();
+        city.setId(cityId);
+        return attractionService.getAttractionsByCity(city);
     }
 
     @PutMapping("/{id}")
-    public void updateAttraction(@PathVariable Long id, @RequestBody AttractionDTO attractionDTO) {
+    public ResponseEntity<AttractionDTO> updateAttraction(@PathVariable Long id, @RequestBody AttractionDTO attractionDTO) {
         attractionDTO.setId(id);
-        attractionService.updateAttraction(attractionDTO);
+        AttractionDTO updatedAttraction = attractionService.updateAttraction(attractionDTO);
+        return ResponseEntity.ok(updatedAttraction);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAttraction(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAttraction(@PathVariable Long id) {
         attractionService.deleteAttraction(id);
+        return ResponseEntity.noContent().build();
     }
 }

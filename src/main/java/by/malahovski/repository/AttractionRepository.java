@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface AttractionRepository extends JpaRepository<Attraction, Long> {
+
     Optional<Attraction> findByCity(City city);
 
     void update(Attraction attraction);

@@ -5,15 +5,19 @@ import by.malahovski.model.City;
 
 import java.util.List;
 
-public interface AttractionService {
-    AttractionDTO getAttractionById(Long id);
 
-    void addAttraction(AttractionDTO attractionDTO);
+public interface AttractionService {
 
     List<AttractionDTO> getAttractionsByCity(City city);
 
-    void updateAttraction(AttractionDTO attractionDTO);
+    AttractionDTO getAttractionById(Long id);
+
+    AttractionDTO addAttraction(AttractionDTO attractionDTO);
+
+    AttractionDTO updateAttraction(AttractionDTO attractionDTO);
+
     List<AttractionDTO> getAllAttractions();
-    List<AttractionDTO> getAttractionsByCity(Long cityId);
+
     void deleteAttraction(Long id);
 }
+

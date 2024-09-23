@@ -1,20 +1,27 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="pre-01" author="Malahovski">
+        <sql>DROP TYPE IF EXISTS attraction_type;</sql>
+        <sql>CREATE TYPE attraction_type AS ENUM ('PALACE', 'PARK', 'MUSEUM', 'ARCHAEOLOGICAL', 'RESERVE');</sql>
+    </changeSet>
 
     <changeSet id="01" author="Malahovski">
+        <!-- city -->
         <createTable tableName="city">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="population" type="integer"/>
             <column name="metro" type="boolean"/>
         </createTable>
 
+        <!-- attraction -->
         <createTable tableName="attraction">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -23,11 +30,39 @@
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="text"/>
-            <column name="type" type="varchar(50)"/>
+            <column name="type" type="attraction_type">
+                <constraints nullable="false"/>
+            </column>
             <column name="creation_date" type="date"/>
             <column name="city_id" type="bigint">
                 <constraints nullable="false" foreignKeyName="fk_attraction_city" references="city(id)"/>
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="02" author="Malahovski">
+        <!-- tour_service -->
+        <createTable tableName="tour_service">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="03" author="Malahovski">
+        <!-- attraction_tour_service -->
+        <createTable tableName="attraction_tour_service">
+            <column name="tour_service_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_attraction_tour_service" references="tour_service(id)"/>
+            </column>
+            <column name="attraction_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_tour_service_attraction" references="attraction(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

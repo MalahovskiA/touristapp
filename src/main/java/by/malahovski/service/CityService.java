@@ -5,10 +5,15 @@ import by.malahovski.dtos.CityDTO;
 import java.util.List;
 
 public interface CityService {
+
     CityDTO getCityById(Long id);
 
-    void addCity(CityDTO cityDTO);
-    void updateCity(CityDTO cityDTO);
+    CityDTO addCity(CityDTO cityDTO);
+
+    CityDTO updateCity(CityDTO cityDTO);
+
     List<CityDTO> getAllCities();
+
     void deleteCity(Long id);
 }
+
