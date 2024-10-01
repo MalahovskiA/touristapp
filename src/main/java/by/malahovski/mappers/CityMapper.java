@@ -2,10 +2,12 @@ package by.malahovski.mappers;
 
 import by.malahovski.dtos.CityDTO;
 import by.malahovski.model.City;
-import org.mapstruct.Mapper;
+import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface CityMapper {
-    City toEntity(CityDTO dto);
+
     CityDTO toDto(City entity);
+
+    City toEntity(CityDTO dto);
 }

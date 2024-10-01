@@ -1,7 +1,6 @@
 package by.malahovski.controller;
 
 
-
 import by.malahovski.dtos.AttractionDTO;
 import by.malahovski.model.City;
 import by.malahovski.service.AttractionService;
@@ -17,6 +16,7 @@ import java.util.List;
 public class AttractionController {
 
     private final AttractionService attractionService;
+
 
     @Autowired
     public AttractionController(AttractionService attractionService) {

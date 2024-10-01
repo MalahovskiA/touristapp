@@ -1,19 +1,17 @@
 package by.malahovski.model;
 
+
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "attraction", schema = "public")
-public class Attraction {
+public class Attraction implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TourService_ServiceImpl implements TourService_Service {
@@ -21,6 +22,7 @@ public class TourService_ServiceImpl implements TourService_Service {
     private final TourServiceMapper tourServiceMapper;
 
     private static final Logger logger = LogManager.getLogger(TourService_ServiceImpl.class);
+
 
     @Autowired
     public TourService_ServiceImpl(TourServiceRepository tourServiceRepository,
@@ -49,11 +51,12 @@ public class TourService_ServiceImpl implements TourService_Service {
         }
     }
 
-    @Override
     public List<TourServiceDTO> findAll() {
         logger.info("Поиск всех услуг");
         List<TourService> tourServices = tourServiceRepository.findAll();
-        return tourServiceMapper.toDtoList(tourServices);
+        return tourServices.stream()
+                .map(tourServiceMapper::toDto)  // Маппим каждую сущность в DTO
+                .collect(Collectors.toList());   // Собираем в список
     }
 
     @Override

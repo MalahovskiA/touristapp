@@ -18,10 +18,9 @@ import java.util.stream.Collectors;
 public class CityServiceImpl implements CityService {
 
     private final CityRepository cityRepository;
-
     private final CityMapper cityMapper;
-
     private static final Logger logger = LogManager.getLogger(CityServiceImpl.class);
+
 
     @Autowired
     public CityServiceImpl(CityRepository cityRepository, CityMapper cityMapper) {
@@ -48,9 +47,11 @@ public class CityServiceImpl implements CityService {
     @Override
     public List<CityDTO> getAllCities() {
         logger.info("Получение списка городов");
-        return cityRepository.findAll().stream()
+        List<CityDTO> cities = cityRepository.findAll().stream()
                 .map(cityMapper::toDto)
                 .collect(Collectors.toList());
+        logger.info("Найденные города: {}", cities);
+        return cities;
     }
 
     @Override

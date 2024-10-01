@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,9 +20,7 @@ import java.util.stream.Collectors;
 public class AttractionServiceImpl implements AttractionService {
 
     private final AttractionRepository attractionRepository;
-
     private final AttractionMapper attractionMapper;
-
     private static final Logger logger = LogManager.getLogger(AttractionServiceImpl.class);
 
     @Autowired
@@ -31,56 +30,78 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
-    public List<AttractionDTO> getAttractionsByCity(City city) {
-        if (city == null) {
-            throw new IllegalArgumentException("Город не должен быть null");
-        }
-        logger.info("Получение достопримечательностей для города: {}", city.getName());
-
-        List<AttractionDTO> attractions = attractionRepository.findByCity(city).stream()
-                .map(attractionMapper::toDto)
-                .collect(Collectors.toList());
-
-        if (attractions.isEmpty()) {
-            logger.warn("Не найдено достопримечательностей для города {}", city.getName());
-        } else {
-            logger.info("Найдено {} достопримечательностей для города {}", attractions.size(), city.getName());
-        }
-        return attractions;
-    }
-
-    @Override
-    public AttractionDTO getAttractionById(Long id) {
-        logger.info("Получение достопримечательности с ID: {}", id);
-        Attraction attraction = attractionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Достопримечательность с id " + id + " не найдена."));
-        return attractionMapper.toDto(attraction);
-    }
-
-    @Override
     public AttractionDTO addAttraction(AttractionDTO attractionDTO) {
         logger.info("Добавление достопримечательности: {}", attractionDTO.getName());
         Attraction attraction = attractionMapper.toEntity(attractionDTO);
         attraction = attractionRepository.save(attraction);
         logger.info("Достопримечательность добавлена: {}", attraction.getName());
-        return attractionMapper.toDto(attraction); // Возвращаем обновленное значение
+        return attractionMapper.toDto(attraction);
+    }
+
+    @Override
+    public AttractionDTO updateAttraction(AttractionDTO attractionDTO) {
+        return null;
     }
 
     @Override
     public List<AttractionDTO> getAllAttractions() {
-        logger.info("Получение списка всех достопримечательностей");
-        return attractionRepository.findAll().stream()
+        return List.of();
+    }
+
+    @Override
+    public List<AttractionDTO> getAllAttractions(String sortBy, String filterByType) {
+        logger.info("Получение всех достопримечательностей с сортировкой по: {} и фильтрацией по типу: {}", sortBy, filterByType);
+
+        List<Attraction> attractions = attractionRepository.findAll();
+
+        if (filterByType != null) {
+            attractions = attractions.stream()
+                    .filter(attraction -> attraction.getType().name().equalsIgnoreCase(filterByType))
+                    .collect(Collectors.toList());
+        }
+
+        if ("name".equalsIgnoreCase(sortBy)) {
+            attractions = attractions.stream()
+                    .sorted(Comparator.comparing(Attraction::getName))
+                    .collect(Collectors.toList());
+        }
+
+        logger.info("Найдено {} достопримечательностей", attractions.size());
+        return attractions.stream()
                 .map(attractionMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public AttractionDTO updateAttraction(AttractionDTO attractionDTO) {
-        logger.info("Обновление достопримечательности: {}", attractionDTO.getName());
-        Attraction attraction = attractionMapper.toEntity(attractionDTO);
-        attraction = attractionRepository.save(attraction); // Используем save для обновления
-        logger.info("Достопримечательность обновлена: {}", attraction.getName());
-        return attractionMapper.toDto(attraction); // Возвращаем обновленное значение
+    public List<AttractionDTO> getAttractionsByCity(City city) {
+        logger.info("Получение достопримечательностей города: {}", city.getName());
+        List<Attraction> attractions = attractionRepository.findByCity(city);
+
+        if (attractions.isEmpty()) {
+            logger.warn("Не найдено достопримечательностей для города {}", city.getName());
+        }
+
+        return attractions.stream()
+                .map(attractionMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public AttractionDTO getAttractionById(Long id) {
+        return null;
+    }
+
+    @Override
+    public AttractionDTO updateDescription(Long id, String newDescription) {
+        logger.info("Обновление описания достопримечательности с ID: {}", id);
+        Attraction attraction = attractionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Достопримечательность с id " + id + " не найдена."));
+
+        attraction.setDescription(newDescription);
+        attraction = attractionRepository.save(attraction);
+
+        logger.info("Описание обновлено для достопримечательности: {}", attraction.getName());
+        return attractionMapper.toDto(attraction);
     }
 
     @Override

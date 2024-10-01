@@ -1,6 +1,8 @@
 package by.malahovski.model;
 
-public enum AttractionType {
+import java.io.Serializable;
+
+public enum AttractionType implements Serializable {
     PALACE,
     PARK,
     MUSEUM,

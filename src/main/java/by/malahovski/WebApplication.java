@@ -1,36 +1,41 @@
 package by.malahovski;
 
 import by.malahovski.config.AppConfig;
-import liquibase.Contexts;
-import liquibase.LabelExpression;
-import liquibase.Liquibase;
-import liquibase.database.Database;
-import liquibase.database.DatabaseFactory;
-import liquibase.database.jvm.JdbcConnection;
-import liquibase.exception.LiquibaseException;
-import liquibase.resource.ClassLoaderResourceAccessor;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import by.malahovski.config.DatabaseConfig;
+import by.malahovski.config.JacksonConfig;
+import by.malahovski.config.JpaConfig;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletRegistration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.servlet.DispatcherServlet;
 
-public class WebApplication {
-    public static void main(String[] args) {
+public class WebApplication implements WebApplicationInitializer {
 
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+    private static final Logger logger = LogManager.getLogger(WebApplication.class);
 
-        String url = "jdbc:postgresql://localhost:788/tur_database";
-        String user = "postgres";
-        String password = "admin";
+    @Override
+    public void onStartup(ServletContext servletContext) {
+        logger.info("Инициализация веб приложения...");
 
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
-            Liquibase liquibase = new Liquibase("db/changelog/db.changelog-master.xml", new ClassLoaderResourceAccessor(), database);
-            liquibase.update(new Contexts(), new LabelExpression());
-            System.out.println("Database migration completed successfully!");
-        } catch (SQLException | LiquibaseException e) {
-            e.printStackTrace();
+        try {
+            // Load Spring web application configuration
+            AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+            context.register(AppConfig.class, DatabaseConfig.class, JpaConfig.class, JacksonConfig.class);
+
+            // Create and register the DispatcherServlet
+            DispatcherServlet servlet = new DispatcherServlet(context);
+            ServletRegistration.Dynamic registration = servletContext.addServlet("dispatcher", servlet);
+            registration.setLoadOnStartup(1);
+            // Map to the root URL pattern
+            registration.addMapping("/");
+
+            logger.info("Веб приложение инициализировано успешно");
+        } catch (Exception e) {
+            logger.error("Сбой инициализации приложения", e);
         }
     }
 }

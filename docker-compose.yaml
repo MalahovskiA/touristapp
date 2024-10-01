@@ -6,21 +6,18 @@ services:
       POSTGRES_DB: tur_database
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
-    ports:
-      - 788:5432
+
     volumes:
       - db-data:/var/lib/postgresql/data
 
-  liquibase:
-    image: liquibase/liquibase
+  app:
+    image: touristapp
+    ports:
+      - "8082:8080"
     environment:
-      - LIQUIBASE_COMMAND=update
-      - LIQUIBASE_URL=jdbc:postgresql://db:5432/tur_database
-      - LIQUIBASE_USERNAME=postgres
-      - LIQUIBASE_PASSWORD=admin
-      - LIQUIBASE_CHANGELOG_FILE=/liquibase/changelog/db.changelog-master.xml
-    volumes:
-      - D:/malahovski/touristapp/src/main/resources/db/changelog:/liquibase/changelog
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/tur_database
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
     depends_on:
       - db
 

@@ -1,28 +1,26 @@
 package by.malahovski.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import java.io.Serializable;
 import java.util.List;
 
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "tour_service")
-public class TourService {
+@Table(name = "tour_service", schema = "public")
+public class TourService implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
+    @Column (name = "description")
     private String description;
 
-    @ManyToMany(mappedBy = "tourService")
+    @ManyToMany(mappedBy = "tourServices")
     private List<Attraction> attractions;
 }

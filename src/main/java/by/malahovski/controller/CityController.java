@@ -15,6 +15,7 @@ public class CityController {
 
     private final CityService cityService;
 
+
     @Autowired
     public CityController(CityService cityService) {
         this.cityService = cityService;
@@ -26,7 +27,7 @@ public class CityController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCity);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/")
     public ResponseEntity<CityDTO> getCityById(@PathVariable Long id) {
         CityDTO cityDTO = cityService.getCityById(id);
         return ResponseEntity.ok(cityDTO);
