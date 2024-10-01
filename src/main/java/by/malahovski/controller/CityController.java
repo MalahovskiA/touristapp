@@ -27,7 +27,7 @@ public class CityController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCity);
     }
 
-    @GetMapping("/")
+    @GetMapping("/{id}")
     public ResponseEntity<CityDTO> getCityById(@PathVariable Long id) {
         CityDTO cityDTO = cityService.getCityById(id);
         return ResponseEntity.ok(cityDTO);
@@ -36,6 +36,11 @@ public class CityController {
     @GetMapping
     public List<CityDTO> getAllCities() {
         return cityService.getAllCities();
+    }
+
+    @GetMapping("/withAttractions")
+    public List<CityDTO> getAllCitiesWithAttractions() {
+        return cityService.getAllCitiesWithAttractions();
     }
 
     @PutMapping("/{id}")

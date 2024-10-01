@@ -6,7 +6,7 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 
 
-@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+@Mapper(componentModel = "spring", uses = {TourServiceMapper.class}, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface AttractionMapper {
 
     AttractionDTO toDto(Attraction entity);

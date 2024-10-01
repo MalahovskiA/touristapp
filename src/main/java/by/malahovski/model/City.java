@@ -1,13 +1,14 @@
 package by.malahovski.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.ToString;
+import lombok.Getter;
+import lombok.Setter;
 import java.io.Serializable;
 import java.util.List;
 
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "city", schema = "public")
 public class City implements Serializable {
@@ -23,7 +24,6 @@ public class City implements Serializable {
     private int population;
 
     @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @ToString.Exclude
     private List<Attraction> attractions;
 
     @Column(name = "metro", nullable = false)
