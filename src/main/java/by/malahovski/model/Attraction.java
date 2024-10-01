@@ -1,14 +1,18 @@
 package by.malahovski.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "attraction", schema = "public")
 public class Attraction implements Serializable {
@@ -31,6 +35,7 @@ public class Attraction implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "city_id", nullable = false, foreignKey = @ForeignKey(name = "fk_attraction_city"))
+    @JsonBackReference
     private City city;
 
     @ManyToMany
@@ -39,5 +44,6 @@ public class Attraction implements Serializable {
             joinColumns = @JoinColumn(name = "attraction_id"),
             inverseJoinColumns = @JoinColumn(name = "tour_service_id")
     )
+    @JsonBackReference
     private List<TourService> tourServices;
 }

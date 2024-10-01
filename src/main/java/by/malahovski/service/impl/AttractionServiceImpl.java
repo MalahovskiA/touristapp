@@ -11,12 +11,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class AttractionServiceImpl implements AttractionService {
 
     private final AttractionRepository attractionRepository;
@@ -57,19 +58,19 @@ public class AttractionServiceImpl implements AttractionService {
         if (filterByType != null) {
             attractions = attractions.stream()
                     .filter(attraction -> attraction.getType().name().equalsIgnoreCase(filterByType))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         if ("name".equalsIgnoreCase(sortBy)) {
             attractions = attractions.stream()
                     .sorted(Comparator.comparing(Attraction::getName))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         logger.info("Найдено {} достопримечательностей", attractions.size());
         return attractions.stream()
                 .map(attractionMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -83,7 +84,7 @@ public class AttractionServiceImpl implements AttractionService {
 
         return attractions.stream()
                 .map(attractionMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

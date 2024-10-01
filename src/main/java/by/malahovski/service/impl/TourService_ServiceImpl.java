@@ -9,12 +9,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class TourService_ServiceImpl implements TourService_Service {
 
     private final TourServiceRepository tourServiceRepository;
@@ -33,7 +34,7 @@ public class TourService_ServiceImpl implements TourService_Service {
 
     @Override
     public TourServiceDTO save(TourServiceDTO tourServiceDTO) {
-        logger.info("Сохранение услуги: {}", tourServiceDTO);
+        logger.info("Save service: {}", tourServiceDTO);
         TourService tourService = tourServiceMapper.toEntity(tourServiceDTO);
         tourService = tourServiceRepository.save(tourService);
         return tourServiceMapper.toDto(tourService);
@@ -46,8 +47,8 @@ public class TourService_ServiceImpl implements TourService_Service {
         if (optionalTourService.isPresent()) {
             return tourServiceMapper.toDto(optionalTourService.get());
         } else {
-            logger.error("Услуга не найдена с ID: {}", id);
-            throw new RuntimeException("Услуга не найдена");
+            logger.error("Service with ID not found: {}", id);
+            throw new RuntimeException("Service with ID not found");
         }
     }
 
@@ -55,8 +56,8 @@ public class TourService_ServiceImpl implements TourService_Service {
         logger.info("Поиск всех услуг");
         List<TourService> tourServices = tourServiceRepository.findAll();
         return tourServices.stream()
-                .map(tourServiceMapper::toDto)  // Маппим каждую сущность в DTO
-                .collect(Collectors.toList());   // Собираем в список
+                .map(tourServiceMapper::toDto)
+                .toList();
     }
 
     @Override

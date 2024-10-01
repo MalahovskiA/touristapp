@@ -10,6 +10,8 @@ public interface CityService {
 
     CityDTO addCity(CityDTO cityDTO);
 
+    List<CityDTO> getAllCitiesWithAttractions();
+
     CityDTO updateCity(CityDTO cityDTO);
 
     List<CityDTO> getAllCities();

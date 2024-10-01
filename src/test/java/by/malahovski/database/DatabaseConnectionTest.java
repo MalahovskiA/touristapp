@@ -1,5 +1,6 @@
-package by.malahovski.config;
+package by.malahovski.database;
 
+import by.malahovski.config.DatabaseConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringJUnitConfig(DatabaseConfig.class)
-public class DatabaseConnectionTest {
+class DatabaseConnectionTest {
 
     @Autowired
     private DataSource dataSource;
@@ -20,13 +21,13 @@ public class DatabaseConnectionTest {
     private JdbcTemplate jdbcTemplate;
 
     @Test
-    public void testDataSourceIsNotNull() {
+    void testDataSourceIsNotNull() {
         // Проверяем, что DataSource настроен и не равен null
         assertNotNull(dataSource, "DataSource должен быть настроен");
     }
 
     @Test
-    public void testConnection() throws Exception {
+    void testConnection() throws Exception {
         // Пробуем получить соединение с базой данных
         try (var connection = dataSource.getConnection()) {
             assertFalse(connection.isClosed(), "Соединение с базой данных должно быть открыто");
@@ -34,7 +35,7 @@ public class DatabaseConnectionTest {
     }
 
     @Test
-    public void testQueryExecution() {
+    void testQueryExecution() {
         // Пробуем выполнить простой SQL-запрос
         Integer result = jdbcTemplate.queryForObject("SELECT 1", Integer.class);
         assertEquals(1, result, "Запрос должен вернуть 1");

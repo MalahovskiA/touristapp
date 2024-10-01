@@ -4,7 +4,6 @@ import by.malahovski.config.DatabaseConfig;
 import by.malahovski.model.City;
 
 
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,13 +17,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringJUnitConfig(DatabaseConfig.class)
-public class CityDatabaseTest {
+class CityDatabaseTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Test
-    public void testGetCityById() {
+    void testGetCityById() {
         // Получаем город по ID
         long cityId = 1; // Укажите ID города, который существует в вашей базе
         String sql = "SELECT id, name, population, metro FROM city WHERE id = ?";
@@ -50,7 +49,7 @@ public class CityDatabaseTest {
     }
 
     @Test
-    public void testGetAllCities() {
+    void testGetAllCities() {
         // Получаем всех городов
         String sql = "SELECT id, name, population, metro FROM city";
 
@@ -69,6 +68,6 @@ public class CityDatabaseTest {
 
         // Проверяем, что список городов не пустой
         assert cities != null;
-        assertEquals(5, cities.size(), "Должно быть 3 города в базе данных"); // Укажите ожидаемое количество городов
+        assertEquals(5, cities.size(), "Должно быть 3 города в базе данных");
     }
 }

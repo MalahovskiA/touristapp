@@ -1,12 +1,16 @@
 package by.malahovski.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.List;
 
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "tour_service", schema = "public")
 public class TourService implements Serializable {
@@ -18,9 +22,10 @@ public class TourService implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Column (name = "description")
+    @Column(name = "description")
     private String description;
 
     @ManyToMany(mappedBy = "tourServices")
+    @JsonManagedReference
     private List<Attraction> attractions;
 }

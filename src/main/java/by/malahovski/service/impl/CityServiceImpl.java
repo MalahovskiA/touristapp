@@ -10,11 +10,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
+@Transactional
 public class CityServiceImpl implements CityService {
 
     private final CityRepository cityRepository;
@@ -49,9 +51,20 @@ public class CityServiceImpl implements CityService {
         logger.info("Получение списка городов");
         List<CityDTO> cities = cityRepository.findAll().stream()
                 .map(cityMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
         logger.info("Найденные города: {}", cities);
         return cities;
+    }
+
+    @Override
+    public List<CityDTO> getAllCitiesWithAttractions() {
+        logger.info("Получение списка городов вместе с достопримечательностями");
+        List<City> cities = cityRepository.findAllWithAttractions();
+        List<CityDTO> cityDTOs = cities.stream()
+                .map(cityMapper::toDto)
+                .toList();
+        logger.info("Найденные города с достопримечательностями: {}", cityDTOs);
+        return cityDTOs;
     }
 
     @Override

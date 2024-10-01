@@ -12,5 +12,5 @@ public class CityDTO {
     private String name;
     private int population;
     private boolean hasMetro;
-    private List<AttractionDTO> attractionDTOList;
+    private List<AttractionDTO> attractions;
 }
