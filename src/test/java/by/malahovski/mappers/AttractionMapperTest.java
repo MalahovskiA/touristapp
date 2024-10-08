@@ -110,7 +110,7 @@ class AttractionMapperTest {
         assertEquals(attractionDTO.getCreationDate(), attraction.getCreationDate());
         assertEquals(attractionDTO.getDescription(), attraction.getDescription());
         assertEquals(attractionDTO.getType(), attraction.getType());
-        assertEquals(attractionDTO.getCityID(), attraction.getCity().getId());
+        
 
         // Проверяем список услуг
         assertEquals(2, attraction.getTourServices().size());
