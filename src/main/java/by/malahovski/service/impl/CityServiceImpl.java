@@ -6,8 +6,6 @@ import by.malahovski.mappers.CityMapper;
 import by.malahovski.model.City;
 import by.malahovski.repository.CityRepository;
 import by.malahovski.service.CityService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +19,8 @@ public class CityServiceImpl implements CityService {
 
     private final CityRepository cityRepository;
     private final CityMapper cityMapper;
-    private static final Logger logger = LogManager.getLogger(CityServiceImpl.class);
+
+    public static final String CITY_NOT_FOUND = "City not found with id";
 
 
     @Autowired
@@ -33,44 +32,59 @@ public class CityServiceImpl implements CityService {
     @Override
     public CityDTO getCityById(Long id) {
         City city = cityRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("City with id " + id + " not found."));
+                .orElseThrow(() -> new EntityNotFoundException(CITY_NOT_FOUND + id));
         return cityMapper.toDto(city);
     }
 
     @Override
     public CityDTO addCity(CityDTO cityDTO) {
-        logger.info("Adding a city: {}", cityDTO.getName());
         City city = cityMapper.toEntity(cityDTO);
         city = cityRepository.save(city);
-        logger.info("City added: {}", city.getName());
         return cityMapper.toDto(city);
     }
 
     @Override
     public List<CityDTO> getAllCities() {
-        logger.info("Getting a list of cities");
-        List<CityDTO> cities = cityRepository.findAll().stream()
+        return cityRepository.findAll().stream()
                 .map(cityMapper::toDto)
                 .toList();
-        logger.info("Cities found: {}", cities);
-        return cities;
     }
 
     @Override
     public CityDTO updateCity(CityDTO cityDTO) {
-        logger.info("Change of city: {}", cityDTO.getName());
-        City city = cityMapper.toEntity(cityDTO);
+        City city = cityRepository.findById(cityDTO.getId())
+                .orElseThrow(() -> new EntityNotFoundException(CITY_NOT_FOUND + cityDTO.getId()));
+
+        city.setName(cityDTO.getName());
+        city.setPopulation(cityDTO.getPopulation());
+        city.setHasMetro(cityDTO.isHasMetro());
+
         city = cityRepository.save(city);
-        logger.info("The city has been changed: {}", city.getName());
+        return cityMapper.toDto(city);
+    }
+
+    @Override
+    @Transactional
+    public CityDTO updateCityDetails(Long cityId, Integer population, Boolean hasMetro) {
+        City city = cityRepository.findById(cityId)
+                .orElseThrow(() -> new EntityNotFoundException(CITY_NOT_FOUND + cityId));
+
+        if (population != null) {
+            city.setPopulation(population);
+        }
+
+        if (hasMetro != null) {
+            city.setHasMetro(hasMetro);
+        }
+
+        city = cityRepository.save(city);
         return cityMapper.toDto(city);
     }
 
     @Override
     public void deleteCity(Long id) {
-        logger.info("Removing city with ID: {}", id);
         City city = cityRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("City with id " + id + " not found."));
+                .orElseThrow(() -> new EntityNotFoundException(CITY_NOT_FOUND + id));
         cityRepository.delete(city);
-        logger.info("City removed ID: {}", id);
     }
 }

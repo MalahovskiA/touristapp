@@ -1,7 +1,6 @@
 package by.malahovski.dtos;
 
 
-
 import lombok.Data;
 
 import java.util.List;

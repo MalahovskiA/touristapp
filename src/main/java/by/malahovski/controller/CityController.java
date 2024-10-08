@@ -45,6 +45,16 @@ public class CityController {
         return ResponseEntity.ok(updatedCity);
     }
 
+    @PatchMapping("/{cityId}")
+    public ResponseEntity<CityDTO> updateCityDetails(
+            @PathVariable Long cityId,
+            @RequestParam(required = false) Integer population,
+            @RequestParam(required = false) Boolean hasMetro) {
+
+        CityDTO updatedCity = cityService.updateCityDetails(cityId, population, hasMetro);
+        return ResponseEntity.ok(updatedCity);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCity(@PathVariable Long id) {
         cityService.deleteCity(id);
