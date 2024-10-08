@@ -14,6 +14,6 @@ public interface AttractionMapper {
     @Mapping(target = "tourServices", source = "tourServices")
     AttractionDTO toDto(Attraction entity);
 
-    @Mapping(target = "city", ignore = true) // Игнорируем полное маппирование города
+    @Mapping(target = "city", ignore = true)
     Attraction toEntity(AttractionDTO dto);
 }

@@ -1,7 +1,7 @@
 package by.malahovski.controller;
 
 import by.malahovski.dtos.TourServiceDTO;
-import by.malahovski.service.TourService_Service;
+import by.malahovski.service.TourManagementService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,10 @@ public class TourServiceController {
 
     private static final Logger logger = LogManager.getLogger(TourServiceController.class);
 
-    private final TourService_Service tourService;
+    private final TourManagementService tourService;
 
     @Autowired
-    public TourServiceController(TourService_Service tourService) {
+    public TourServiceController(TourManagementService tourService) {
         this.tourService = tourService;
     }
 

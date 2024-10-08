@@ -8,7 +8,7 @@ import by.malahovski.model.Attraction;
 import by.malahovski.model.TourService;
 import by.malahovski.repository.TourServiceRepository;
 import by.malahovski.service.AttractionService;
-import by.malahovski.service.TourService_Service;
+import by.malahovski.service.TourManagementService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,22 +19,22 @@ import java.util.List;
 
 @Service
 @Transactional
-public class TourService_ServiceImpl implements TourService_Service {
+public class TourManagementServiceImpl implements TourManagementService {
 
     private final TourServiceRepository tourServiceRepository;
     private final TourServiceMapper tourServiceMapper;
     private final AttractionService attractionService;
 
-    private static final Logger logger = LogManager.getLogger(TourService_ServiceImpl.class);
+    private static final Logger logger = LogManager.getLogger(TourManagementServiceImpl.class);
     private final AttractionMapper attractionMapper;
 
     public static final String SERVICE_NOT_FOUND = "Service not found with ID";
 
     @Autowired
-    public TourService_ServiceImpl(TourServiceRepository tourServiceRepository,
-                                   TourServiceMapper tourServiceMapper,
-                                   AttractionService attractionService,
-                                   AttractionMapper attractionMapper) {
+    public TourManagementServiceImpl(TourServiceRepository tourServiceRepository,
+                                     TourServiceMapper tourServiceMapper,
+                                     AttractionService attractionService,
+                                     AttractionMapper attractionMapper) {
         this.tourServiceRepository = tourServiceRepository;
         this.tourServiceMapper = tourServiceMapper;
         this.attractionService = attractionService;

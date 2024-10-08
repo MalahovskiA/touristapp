@@ -14,15 +14,12 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = {AttractionMapper.class}, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface TourServiceMapper {
 
-    // Маппим список аттракционов в список их ID
     @Mapping(target = "attractionsIDs", source = "attractions")
     TourServiceDTO toDto(TourService entity);
 
-    // Маппим список ID в список аттракционов
     @Mapping(target = "attractions", source = "attractionsIDs")
     TourService toEntity(TourServiceDTO dto);
 
-    // Метод для маппинга списка аттракционов в список их ID
     default List<Long> mapAttractionsToIds(List<Attraction> attractions) {
         if (attractions == null) {
             return null;
@@ -30,7 +27,6 @@ public interface TourServiceMapper {
         return attractions.stream().map(Attraction::getId).toList();
     }
 
-    // Метод для маппинга списка ID в список аттракционов
     default List<Attraction> mapIdsToAttractions(List<Long> ids) {
         if (ids == null) {
             return null;

@@ -4,7 +4,7 @@ import by.malahovski.dtos.TourServiceDTO;
 
 import java.util.List;
 
-public interface TourService_Service {
+public interface TourManagementService {
 
     TourServiceDTO save(TourServiceDTO tourServiceDTO);
 

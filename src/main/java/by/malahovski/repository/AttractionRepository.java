@@ -11,9 +11,7 @@ import java.util.List;
 
 
 @Repository
-public interface AttractionRepository extends JpaRepository<Attraction,Long> {
-
-    List<Attraction> findByCityId(Long cityId);
+public interface AttractionRepository extends JpaRepository<Attraction, Long> {
 
     List<Attraction> findByCity(City city);
 
