@@ -1,6 +1,7 @@
 package by.malahovski.config;
 
 import jakarta.persistence.EntityManagerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -19,6 +20,15 @@ public class JpaConfig {
 
     private final DataSource dataSource;
 
+    @Value("${spring.jpa.properties.hibernate.dialect}")
+    private String hibernateDialect;
+
+    @Value("${spring.jpa.show-sql}")
+    private String showSql;
+
+    @Value("${spring.jpa.hibernate.ddl-auto}")
+    private String hbm2ddlAuto;
+
     public JpaConfig(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -33,9 +43,9 @@ public class JpaConfig {
         em.setJpaVendorAdapter(vendorAdapter);
 
         Properties jpaProperties = new Properties();
-        jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-        jpaProperties.put("hibernate.show_sql", "true");
-        jpaProperties.put("hibernate.hbm2ddl.auto", "update");
+        jpaProperties.put("hibernate.dialect", hibernateDialect);
+        jpaProperties.put("hibernate.show_sql", showSql);
+        jpaProperties.put("hibernate.hbm2ddl.auto", hbm2ddlAuto);
 
         em.setJpaProperties(jpaProperties);
 
