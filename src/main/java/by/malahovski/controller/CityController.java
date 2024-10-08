@@ -38,11 +38,6 @@ public class CityController {
         return cityService.getAllCities();
     }
 
-    @GetMapping("/withAttractions")
-    public List<CityDTO> getAllCitiesWithAttractions() {
-        return cityService.getAllCitiesWithAttractions();
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<CityDTO> updateCity(@PathVariable Long id, @RequestBody CityDTO cityDTO) {
         cityDTO.setId(id);

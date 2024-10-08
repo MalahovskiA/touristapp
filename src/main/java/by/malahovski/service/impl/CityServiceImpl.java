@@ -33,55 +33,44 @@ public class CityServiceImpl implements CityService {
     @Override
     public CityDTO getCityById(Long id) {
         City city = cityRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Город с id " + id + " не найден."));
+                .orElseThrow(() -> new EntityNotFoundException("City with id " + id + " not found."));
         return cityMapper.toDto(city);
     }
 
     @Override
     public CityDTO addCity(CityDTO cityDTO) {
-        logger.info("Добавление города: {}", cityDTO.getName());
+        logger.info("Adding a city: {}", cityDTO.getName());
         City city = cityMapper.toEntity(cityDTO);
         city = cityRepository.save(city);
-        logger.info("Город добавлен: {}", city.getName());
+        logger.info("City added: {}", city.getName());
         return cityMapper.toDto(city);
     }
 
     @Override
     public List<CityDTO> getAllCities() {
-        logger.info("Получение списка городов");
+        logger.info("Getting a list of cities");
         List<CityDTO> cities = cityRepository.findAll().stream()
                 .map(cityMapper::toDto)
                 .toList();
-        logger.info("Найденные города: {}", cities);
+        logger.info("Cities found: {}", cities);
         return cities;
     }
 
     @Override
-    public List<CityDTO> getAllCitiesWithAttractions() {
-        logger.info("Получение списка городов вместе с достопримечательностями");
-        List<City> cities = cityRepository.findAllWithAttractions();
-        List<CityDTO> cityDTOs = cities.stream()
-                .map(cityMapper::toDto)
-                .toList();
-        logger.info("Найденные города с достопримечательностями: {}", cityDTOs);
-        return cityDTOs;
-    }
-
-    @Override
     public CityDTO updateCity(CityDTO cityDTO) {
-        logger.info("Изменение города: {}", cityDTO.getName());
+        logger.info("Change of city: {}", cityDTO.getName());
         City city = cityMapper.toEntity(cityDTO);
         city = cityRepository.save(city);
-        logger.info("Город изменен: {}", city.getName());
+        logger.info("The city has been changed: {}", city.getName());
         return cityMapper.toDto(city);
     }
 
     @Override
     public void deleteCity(Long id) {
-        logger.info("Удаление города с ID: {}", id);
+        logger.info("Removing city with ID: {}", id);
         City city = cityRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Город с id " + id + " не найден."));
+                .orElseThrow(() -> new EntityNotFoundException("City with id " + id + " not found."));
         cityRepository.delete(city);
-        logger.info("Город удален ID: {}", id);
+        logger.info("City removed ID: {}", id);
     }
 }

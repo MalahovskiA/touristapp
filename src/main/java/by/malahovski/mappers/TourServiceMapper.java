@@ -4,6 +4,7 @@ package by.malahovski.mappers;
 import by.malahovski.dtos.TourServiceDTO;
 import by.malahovski.model.Attraction;
 import by.malahovski.model.TourService;
+import java.util.Collections;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -22,14 +23,14 @@ public interface TourServiceMapper {
 
     default List<Long> mapAttractionsToIds(List<Attraction> attractions) {
         if (attractions == null) {
-            return null;
+            return Collections.emptyList();
         }
         return attractions.stream().map(Attraction::getId).toList();
     }
 
     default List<Attraction> mapIdsToAttractions(List<Long> ids) {
         if (ids == null) {
-            return null;
+            return Collections.emptyList();
         }
         return ids.stream().map(id -> {
             Attraction attraction = new Attraction();

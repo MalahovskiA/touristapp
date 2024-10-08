@@ -4,7 +4,6 @@ import by.malahovski.dtos.AttractionDTO;
 import by.malahovski.handler.EntityNotFoundException;
 import by.malahovski.mappers.AttractionMapper;
 import by.malahovski.model.Attraction;
-import by.malahovski.model.City;
 import by.malahovski.repository.AttractionRepository;
 import by.malahovski.service.AttractionService;
 import org.apache.logging.log4j.LogManager;
@@ -58,15 +57,6 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
-    public List<AttractionDTO> getAllAttractions() {
-        logger.info("Get all attractions without filtering");
-        List<Attraction> attractions = attractionRepository.findAll();
-        return attractions.stream()
-                .map(attractionMapper::toDto)
-                .toList();
-    }
-
-    @Override
     public List<AttractionDTO> getAllAttractions(String sortBy, String filterByType) {
         logger.info("Get all attractions sorted by: {} and filtered by type: {}", sortBy, filterByType);
         List<Attraction> attractions = attractionRepository.findAll();
@@ -90,12 +80,12 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
-    public List<AttractionDTO> getAttractionsByCity(City city) {
-        logger.info("Getting City Attractions: {}", city.getName());
-        List<Attraction> attractions = attractionRepository.findByCity(city);
+    public List<AttractionDTO> getAttractionsByCityName(String cityName) {
+        logger.info("Getting City Attractions: {}", cityName);
+        List<Attraction> attractions = attractionRepository.findByCityName(cityName);
 
         if (attractions.isEmpty()) {
-            logger.warn("No attractions found for the city {}", city.getName());
+            logger.warn("No attractions found for the city {}", cityName);
         }
 
         return attractions.stream()
