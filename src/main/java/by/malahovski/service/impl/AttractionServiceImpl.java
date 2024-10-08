@@ -24,6 +24,8 @@ public class AttractionServiceImpl implements AttractionService {
     private final AttractionMapper attractionMapper;
     private static final Logger logger = LogManager.getLogger(AttractionServiceImpl.class);
 
+    public static final String ATTRACTION_NOT_FOUND = "Attraction not found with ID";
+
     @Autowired
     public AttractionServiceImpl(AttractionRepository attractionRepository, AttractionMapper attractionMapper) {
         this.attractionRepository = attractionRepository;
@@ -32,18 +34,18 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     public AttractionDTO addAttraction(AttractionDTO attractionDTO) {
-        logger.info("Добавление достопримечательности: {}", attractionDTO.getName());
+        logger.info("Adding a landmark: {}", attractionDTO.getName());
         Attraction attraction = attractionMapper.toEntity(attractionDTO);
         attraction = attractionRepository.save(attraction);
-        logger.info("Достопримечательность добавлена: {}", attraction.getName());
+        logger.info("Landmark added: {}", attraction.getName());
         return attractionMapper.toDto(attraction);
     }
 
     @Override
     public AttractionDTO updateAttraction(AttractionDTO attractionDTO) {
-        logger.info("Обновление достопримечательности с ID: {}", attractionDTO.getId());
+        logger.info("Updating a landmark with ID: {}", attractionDTO.getId());
         Attraction attraction = attractionRepository.findById(attractionDTO.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Attraction with id " + attractionDTO.getId() + " is not found."));
+                .orElseThrow(() -> new EntityNotFoundException(ATTRACTION_NOT_FOUND + attractionDTO.getId()));
 
         attraction.setName(attractionDTO.getName());
         attraction.setDescription(attractionDTO.getDescription());
@@ -51,13 +53,13 @@ public class AttractionServiceImpl implements AttractionService {
         attraction.setCreationDate(attractionDTO.getCreationDate());
 
         attraction = attractionRepository.save(attraction);
-        logger.info("Достопримечательность обновлена: {}", attraction.getName());
+        logger.info("The landmark has been updated: {}", attraction.getName());
         return attractionMapper.toDto(attraction);
     }
 
     @Override
     public List<AttractionDTO> getAllAttractions() {
-        logger.info("Получение всех достопримечательностей без фильтрации");
+        logger.info("Get all attractions without filtering");
         List<Attraction> attractions = attractionRepository.findAll();
         return attractions.stream()
                 .map(attractionMapper::toDto)
@@ -66,7 +68,7 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     public List<AttractionDTO> getAllAttractions(String sortBy, String filterByType) {
-        logger.info("Получение всех достопримечательностей с сортировкой по: {} и фильтрацией по типу: {}", sortBy, filterByType);
+        logger.info("Get all attractions sorted by: {} and filtered by type: {}", sortBy, filterByType);
         List<Attraction> attractions = attractionRepository.findAll();
 
         if (filterByType != null && !filterByType.isEmpty()) {
@@ -81,7 +83,7 @@ public class AttractionServiceImpl implements AttractionService {
                     .toList();
         }
 
-        logger.info("Найдено {} достопримечательностей", attractions.size());
+        logger.info("Found {} attractions", attractions.size());
         return attractions.stream()
                 .map(attractionMapper::toDto)
                 .toList();
@@ -89,11 +91,11 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     public List<AttractionDTO> getAttractionsByCity(City city) {
-        logger.info("Получение достопримечательностей города: {}", city.getName());
+        logger.info("Getting City Attractions: {}", city.getName());
         List<Attraction> attractions = attractionRepository.findByCity(city);
 
         if (attractions.isEmpty()) {
-            logger.warn("Не найдено достопримечательностей для города {}", city.getName());
+            logger.warn("No attractions found for the city {}", city.getName());
         }
 
         return attractions.stream()
@@ -103,31 +105,31 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     public AttractionDTO getAttractionById(Long id) {
-        logger.info("Получение достопримечательности по ID: {}", id);
+        logger.info("Getting a landmark by ID: {}", id);
         Attraction attraction = attractionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Достопримечательность с id " + id + " не найдена."));
+                .orElseThrow(() -> new EntityNotFoundException(ATTRACTION_NOT_FOUND + id));
         return attractionMapper.toDto(attraction);
     }
 
     @Override
     public AttractionDTO updateDescription(Long id, String newDescription) {
-        logger.info("Обновление описания достопримечательности с ID: {}", id);
+        logger.info("Updating the description of the landmark with ID: {}", id);
         Attraction attraction = attractionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Достопримечательность с id " + id + " не найдена."));
+                .orElseThrow(() -> new EntityNotFoundException(ATTRACTION_NOT_FOUND + id));
 
         attraction.setDescription(newDescription);
         attraction = attractionRepository.save(attraction);
 
-        logger.info("Описание обновлено для достопримечательности: {}", attraction.getName());
+        logger.info("Description updated for landmark: {}", attraction.getName());
         return attractionMapper.toDto(attraction);
     }
 
     @Override
     public void deleteAttraction(Long id) {
-        logger.info("Удаление достопримечательности с ID: {}", id);
+        logger.info("Removing landmarks with ID: {}", id);
         Attraction attraction = attractionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Достопримечательность с id " + id + " не найдена."));
+                .orElseThrow(() -> new EntityNotFoundException(ATTRACTION_NOT_FOUND + id));
         attractionRepository.delete(attraction);
-        logger.info("Достопримечательность удалена ID: {}", id);
+        logger.info("Landmark removed ID: {}", id);
     }
 }

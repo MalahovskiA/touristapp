@@ -1,7 +1,7 @@
 package by.malahovski.service.impl;
 
 import by.malahovski.dtos.TourServiceDTO;
-import by.malahovski.handler.ServiceNotFoundException;
+import by.malahovski.handler.EntityNotFoundException;
 import by.malahovski.mappers.AttractionMapper;
 import by.malahovski.mappers.TourServiceMapper;
 import by.malahovski.model.Attraction;
@@ -18,24 +18,26 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional // Если хотите делать транзакции на уровне класса, оставьте это здесь.
+@Transactional
 public class TourService_ServiceImpl implements TourService_Service {
 
     private final TourServiceRepository tourServiceRepository;
     private final TourServiceMapper tourServiceMapper;
-    private final AttractionService attractionService; // Внедряем зависимость от сервиса достопримечательностей
+    private final AttractionService attractionService;
 
     private static final Logger logger = LogManager.getLogger(TourService_ServiceImpl.class);
     private final AttractionMapper attractionMapper;
+
+    public static final String SERVICE_NOT_FOUND = "Service not found with ID";
 
     @Autowired
     public TourService_ServiceImpl(TourServiceRepository tourServiceRepository,
                                    TourServiceMapper tourServiceMapper,
                                    AttractionService attractionService,
-                                   AttractionMapper attractionMapper) { // Добавляем зависимость
+                                   AttractionMapper attractionMapper) {
         this.tourServiceRepository = tourServiceRepository;
         this.tourServiceMapper = tourServiceMapper;
-        this.attractionService = attractionService; // Инициализация нового сервиса
+        this.attractionService = attractionService;
         this.attractionMapper = attractionMapper;
     }
 
@@ -52,7 +54,7 @@ public class TourService_ServiceImpl implements TourService_Service {
         logger.info("Fetching service by ID: {}", id);
         return tourServiceRepository.findById(id)
                 .map(tourServiceMapper::toDto)
-                .orElseThrow(() -> new ServiceNotFoundException("Service with ID " + id + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Service with ID " + id + " not found"));
     }
 
     @Override
@@ -72,7 +74,7 @@ public class TourService_ServiceImpl implements TourService_Service {
             logger.info("Service with ID {} has been deleted", id);
         } else {
             logger.error("Service not found by ID: {}", id);
-            throw new ServiceNotFoundException("Service not found with ID " + id);
+            throw new EntityNotFoundException(SERVICE_NOT_FOUND + id);
         }
     }
 
@@ -85,7 +87,7 @@ public class TourService_ServiceImpl implements TourService_Service {
         Attraction attraction = attractionMapper.toEntity(attractionService.getAttractionById(attractionId));
 
         TourService tourService = tourServiceRepository.findById(tourServiceId)
-                .orElseThrow(() -> new ServiceNotFoundException("Service not found with ID " + tourServiceId));
+                .orElseThrow(() -> new EntityNotFoundException(SERVICE_NOT_FOUND + tourServiceId));
 
         tourService.getAttractions().add(attraction);
         tourServiceRepository.save(tourService);
@@ -102,7 +104,7 @@ public class TourService_ServiceImpl implements TourService_Service {
         Attraction attraction = attractionMapper.toEntity(attractionService.getAttractionById(attractionId));
 
         TourService tourService = tourServiceRepository.findById(tourServiceId)
-                .orElseThrow(() -> new ServiceNotFoundException("Service not found with ID " + tourServiceId));
+                .orElseThrow(() -> new EntityNotFoundException(SERVICE_NOT_FOUND + tourServiceId));
 
         tourService.getAttractions().remove(attraction);
         tourServiceRepository.save(tourService);
