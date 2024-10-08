@@ -41,21 +41,35 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     public AttractionDTO updateAttraction(AttractionDTO attractionDTO) {
-        return null;
+        logger.info("Обновление достопримечательности с ID: {}", attractionDTO.getId());
+        Attraction attraction = attractionRepository.findById(attractionDTO.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Attraction with id " + attractionDTO.getId() + " is not found."));
+
+        attraction.setName(attractionDTO.getName());
+        attraction.setDescription(attractionDTO.getDescription());
+        attraction.setType(attractionDTO.getType());
+        attraction.setCreationDate(attractionDTO.getCreationDate());
+
+        attraction = attractionRepository.save(attraction);
+        logger.info("Достопримечательность обновлена: {}", attraction.getName());
+        return attractionMapper.toDto(attraction);
     }
 
     @Override
     public List<AttractionDTO> getAllAttractions() {
-        return List.of();
+        logger.info("Получение всех достопримечательностей без фильтрации");
+        List<Attraction> attractions = attractionRepository.findAll();
+        return attractions.stream()
+                .map(attractionMapper::toDto)
+                .toList();
     }
 
     @Override
     public List<AttractionDTO> getAllAttractions(String sortBy, String filterByType) {
         logger.info("Получение всех достопримечательностей с сортировкой по: {} и фильтрацией по типу: {}", sortBy, filterByType);
-
         List<Attraction> attractions = attractionRepository.findAll();
 
-        if (filterByType != null) {
+        if (filterByType != null && !filterByType.isEmpty()) {
             attractions = attractions.stream()
                     .filter(attraction -> attraction.getType().name().equalsIgnoreCase(filterByType))
                     .toList();
@@ -89,7 +103,10 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     public AttractionDTO getAttractionById(Long id) {
-        return null;
+        logger.info("Получение достопримечательности по ID: {}", id);
+        Attraction attraction = attractionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Достопримечательность с id " + id + " не найдена."));
+        return attractionMapper.toDto(attraction);
     }
 
     @Override
