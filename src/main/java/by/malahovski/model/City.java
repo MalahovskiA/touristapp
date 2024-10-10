@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.io.Serializable;
 import java.util.List;
@@ -39,7 +41,8 @@ public class City implements Serializable {
      * The list of attractions associated with the city.
      * This relationship is managed by the {@link Attraction} entity.
      */
-    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
+    @Fetch(FetchMode.SUBSELECT)
     @JsonManagedReference
     private List<Attraction> attractions;
 

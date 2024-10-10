@@ -1,9 +1,6 @@
 package by.malahovski;
 
-import by.malahovski.config.AppConfig;
-import by.malahovski.config.DatabaseConfig;
-import by.malahovski.config.JacksonConfig;
-import by.malahovski.config.JpaConfig;
+import by.malahovski.config.*;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletRegistration;
 import org.apache.logging.log4j.LogManager;
@@ -41,7 +38,7 @@ public class WebApplication implements WebApplicationInitializer {
 
         try {
             AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-            context.register(AppConfig.class, DatabaseConfig.class, JpaConfig.class, JacksonConfig.class);
+            context.register(AppConfig.class, DatabaseConfig.class, JpaConfig.class, JacksonConfig.class, WebMvcConfig.class, SwaggerConfig.class);
 
             DispatcherServlet servlet = new DispatcherServlet(context);
             ServletRegistration.Dynamic registration = servletContext.addServlet("dispatcher", servlet);
