@@ -19,7 +19,7 @@ public class HomeController {
      *
      * @return the name of the home view
      */
-    @GetMapping
+    @GetMapping("/")
     public String home() {
         return "home";
     }

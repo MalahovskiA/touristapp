@@ -42,7 +42,6 @@ class AttractionMapperTest {
         assertEquals(attraction.getType(), attractionDTO.getType());
         assertEquals(attraction.getCity().getId(), attractionDTO.getId());
 
-        // Проверяем список услуг
         assertEquals(2, attractionDTO.getTourServices().size());
         assertEquals(attraction.getTourServices().getFirst().getId(), attractionDTO.getTourServices().getFirst().getId());
         assertEquals(attraction.getTourServices().get(1).getId(), attractionDTO.getTourServices().get(1).getId());
@@ -78,6 +77,22 @@ class AttractionMapperTest {
 
     @Test
     void testToEntity() {
+        AttractionDTO attractionDTO = getAttractionDTO();
+
+        Attraction attraction = attractionMapper.toEntity(attractionDTO);
+
+        assertEquals(attractionDTO.getId(), attraction.getId());
+        assertEquals(attractionDTO.getName(), attraction.getName());
+        assertEquals(attractionDTO.getCreationDate(), attraction.getCreationDate());
+        assertEquals(attractionDTO.getDescription(), attraction.getDescription());
+        assertEquals(attractionDTO.getType(), attraction.getType());
+
+        assertEquals(2, attraction.getTourServices().size());
+        assertEquals(attractionDTO.getTourServices().get(0).getId(), attraction.getTourServices().get(0).getId());
+        assertEquals(attractionDTO.getTourServices().get(1).getId(), attraction.getTourServices().get(1).getId());
+    }
+
+    private static AttractionDTO getAttractionDTO() {
         CityDTO city = new CityDTO();
         city.setId(1L);
         city.setName("Moscow");
@@ -101,20 +116,7 @@ class AttractionMapperTest {
         attractionDTO.setDescription("The Moscow Kremlin is a fortified complex at the heart of Moscow.");
         attractionDTO.setType(AttractionType.PALACE);
         attractionDTO.setCityID(1L);
-        attractionDTO.setTourServices(Arrays.asList(serviceDTO1,serviceDTO2));
-
-        Attraction attraction = attractionMapper.toEntity(attractionDTO);
-
-        assertEquals(attractionDTO.getId(), attraction.getId());
-        assertEquals(attractionDTO.getName(), attraction.getName());
-        assertEquals(attractionDTO.getCreationDate(), attraction.getCreationDate());
-        assertEquals(attractionDTO.getDescription(), attraction.getDescription());
-        assertEquals(attractionDTO.getType(), attraction.getType());
-        
-
-        // Проверяем список услуг
-        assertEquals(2, attraction.getTourServices().size());
-        assertEquals(attractionDTO.getTourServices().get(0).getId(), attraction.getTourServices().get(0).getId());
-        assertEquals(attractionDTO.getTourServices().get(1).getId(), attraction.getTourServices().get(1).getId());
+        attractionDTO.setTourServices(Arrays.asList(serviceDTO1, serviceDTO2));
+        return attractionDTO;
     }
 }

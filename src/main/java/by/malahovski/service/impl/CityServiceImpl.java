@@ -20,7 +20,7 @@ public class CityServiceImpl implements CityService {
     private final CityRepository cityRepository;
     private final CityMapper cityMapper;
 
-    public static final String CITY_NOT_FOUND = "City not found with id";
+    public static final String CITY_NOT_FOUND = "City not found with id ";
 
 
     @Autowired

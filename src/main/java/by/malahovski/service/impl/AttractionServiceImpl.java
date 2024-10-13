@@ -20,7 +20,7 @@ public class AttractionServiceImpl implements AttractionService {
     private final AttractionRepository attractionRepository;
     private final AttractionMapper attractionMapper;
 
-    public static final String ATTRACTION_NOT_FOUND = "Attraction not found with ID";
+    public static final String ATTRACTION_NOT_FOUND = "Attraction not found with ID ";
 
 
     @Autowired

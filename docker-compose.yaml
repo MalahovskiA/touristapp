@@ -1,25 +1,44 @@
+version: '3.8'
 services:
   db:
     image: postgres:16.4-alpine3.20
     restart: always
     environment:
-      POSTGRES_DB: tur_database
+      POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
-
+    ports:
+      - "5433:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
+    networks:
+      - mynetwork
 
   app:
-    image: touristapp
+    build: .
     ports:
-      - "8082:8080"
+      - "788:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/tur_database
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
     depends_on:
       - db
+
+  pgadmin:
+    image: dpage/pgadmin4:8.11.0
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "789:80"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
 
 volumes:
   db-data:

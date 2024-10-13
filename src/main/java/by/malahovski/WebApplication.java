@@ -36,9 +36,10 @@ public class WebApplication implements WebApplicationInitializer {
     public void onStartup(ServletContext servletContext) {
         logger.info("Initializing web application...");
 
+
         try {
             AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-            context.register(AppConfig.class, DatabaseConfig.class, JpaConfig.class, JacksonConfig.class, WebMvcConfig.class, SwaggerConfig.class);
+            context.register(AppConfig.class, DatabaseConfig.class, JpaConfig.class, JacksonConfig.class, SwaggerConfig.class);
 
             DispatcherServlet servlet = new DispatcherServlet(context);
             ServletRegistration.Dynamic registration = servletContext.addServlet("dispatcher", servlet);

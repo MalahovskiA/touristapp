@@ -1,7 +1,9 @@
 package by.malahovski.dtos;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -13,6 +15,8 @@ import java.util.List;
  * different layers of the application.
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class TourServiceDTO {
 
     /**

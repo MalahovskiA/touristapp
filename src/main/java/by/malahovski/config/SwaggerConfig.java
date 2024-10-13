@@ -16,7 +16,7 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2) // Используем OpenAPI 3
+        return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("by.malahovski.controller"))
                 .paths(PathSelectors.any())

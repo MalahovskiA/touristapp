@@ -1,14 +1,20 @@
-# Используем официальный образ Tomcat с поддержкой Java 17
-FROM tomcat:9.0-jdk17-temurin
-
-# Удаляем дефолтные приложения Tomcat (опционально)
-RUN rm -rf /usr/local/tomcat/webapps/*
+# Используем базовый образ Tomcat 10 с JDK 17
+FROM tomcat:10.1.28-jre17
 
 # Копируем ваш WAR файл в директорию для деплоя Tomcat
-COPY target/touristapp.war /usr/local/tomcat/webapps/ROOT.war
+COPY target/touristapp.war /usr/local/tomcat/webapps/touristapp.war
 
-# Expose порт, на котором работает Tomcat
+# Копируем wait-for-it.sh в контейнер
+COPY wait-for-it.sh /usr/local/bin/wait-for-it
+RUN chmod +x /usr/local/bin/wait-for-it
+
+# Экспортируем порт, на котором работает Tomcat
 EXPOSE 8080
 
-# Стартуем Tomcat
-CMD ["catalina.sh", "run"]
+# Установите переменные среды (если они есть) в формате "ключ=значение"
+ENV SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+ENV SPRING_DATASOURCE_USERNAME=postgres
+ENV SPRING_DATASOURCE_PASSWORD=admin
+
+# Запуск Tomcat с ожиданием базы данных
+CMD ["wait-for-it", "db:5432", "--", "catalina.sh", "run"]
