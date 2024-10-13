@@ -11,8 +11,6 @@ services:
       - "5433:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
-    networks:
-      - mynetwork
 
   app:
     build: .
@@ -24,21 +22,6 @@ services:
       SPRING_DATASOURCE_PASSWORD: admin
     depends_on:
       - db
-
-  pgadmin:
-    image: dpage/pgadmin4:8.11.0
-    container_name: pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - "789:80"
-    networks:
-      - mynetwork
-
-networks:
-  mynetwork:
-    driver: bridge
 
 volumes:
   db-data:

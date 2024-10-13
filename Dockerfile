@@ -2,7 +2,7 @@
 FROM tomcat:10.1.28-jre17
 
 # Копируем ваш WAR файл в директорию для деплоя Tomcat
-COPY target/touristapp.war /usr/local/tomcat/webapps/touristapp.war
+COPY target/touristApp.war /usr/local/tomcat/webapps/touristApp.war
 
 # Копируем wait-for-it.sh в контейнер
 COPY wait-for-it.sh /usr/local/bin/wait-for-it
