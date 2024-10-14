@@ -43,7 +43,7 @@ class AttractionMapperTest {
         assertEquals(attraction.getCity().getId(), attractionDTO.getId());
 
         assertEquals(2, attractionDTO.getTourServices().size());
-        assertEquals(attraction.getTourServices().getFirst().getId(), attractionDTO.getTourServices().getFirst().getId());
+        assertEquals(attraction.getTourServices().get(0).getId(), attractionDTO.getTourServices().get(0).getId());
         assertEquals(attraction.getTourServices().get(1).getId(), attractionDTO.getTourServices().get(1).getId());
     }
 

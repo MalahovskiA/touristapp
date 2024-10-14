@@ -67,7 +67,7 @@ class CityMapperTest {
         assertNotNull(attractionDTOList);
         assertEquals(2, attractionDTOList.size());
 
-        AttractionDTO attractionDTO1 = attractionDTOList.getFirst();
+        AttractionDTO attractionDTO1 = attractionDTOList.get(0);
         assertEquals(attraction1.getId(), attractionDTO1.getId());
         assertEquals(attraction1.getName(), attractionDTO1.getName());
         assertEquals(attraction1.getCreationDate(), attractionDTO1.getCreationDate());
@@ -121,7 +121,7 @@ class CityMapperTest {
         assertNotNull(attractions);
         assertEquals(2, attractions.size());
 
-        Attraction attraction1 = attractions.getFirst();
+        Attraction attraction1 = attractions.get(0);
         assertEquals(attractionDTO1.getId(), attraction1.getId());
         assertEquals(attractionDTO1.getName(), attraction1.getName());
         assertEquals(attractionDTO1.getCreationDate(), attraction1.getCreationDate());

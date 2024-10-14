@@ -91,7 +91,7 @@ class TourManagementServiceImplTest {
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals("City Tour", result.getFirst().getName());
+        assertEquals("City Tour", result.get(0).getName());
     }
 
     @Test
