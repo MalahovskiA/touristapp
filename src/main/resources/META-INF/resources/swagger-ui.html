@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swagger UI</title>
+    <!-- Подключение favicon -->
+    <link rel="icon" type="image/png" href="./webjars/swagger-ui/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="./webjars/swagger-ui/favicon-32x32.png" sizes="32x32">
+
+    <!-- Подключение стилей и скриптов -->
+    <link rel="stylesheet" type="text/css" href="./webjars/swagger-ui/swagger-ui.css">
+    <link rel="stylesheet" type="text/css" href="./webjars/swagger-ui/index.css">
+    <link rel="stylesheet" type="text/css" href="./webjars/swagger-ui/swagger-ui.css">
+    <script src="./webjars/swagger-ui/swagger-ui-bundle.js" defer></script>
+    <script src="./webjars/swagger-ui/swagger-ui-standalone-preset.js" defer></script>
+</head>
+<body>
+<div id="swagger-ui"></div>
+<script>
+    window.onload = function() {
+        const basePath = window.location.pathname.split('/')[1];
+        const apiUrl = `/${basePath}/v3/api-docs`;
+
+        const ui = SwaggerUIBundle({
+            url: apiUrl,
+            dom_id: '#swagger-ui',
+            presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIStandalonePreset
+            ],
+            layout: "BaseLayout",
+            deepLinking: true
+        });
+    };
+</script>
+</body>
+</html>

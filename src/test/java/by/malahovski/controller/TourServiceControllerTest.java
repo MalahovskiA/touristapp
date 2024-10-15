@@ -41,7 +41,7 @@ class TourServiceControllerTest {
 
         ResponseEntity<TourServiceDTO> responseEntity = tourServiceController.createTourService(tourServiceDTO);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
         assertEquals("City Tour", responseEntity.getBody().getName());
 
